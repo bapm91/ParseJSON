@@ -51,11 +51,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.mTextViewFirstTeam.setText(mFootballScore.getFixtures()[position - 1].getHomeTeamName());
-        holder.mTextViewSecondTeam.setText(mFootballScore.getFixtures()[position - 1].getAwayTeamName());
-        //holder.mTextViewGoalsFirstTeam.setText(mFootballScore.getFixtures()[position - 1].);
-        // TODO score  "mFootballScore.getFixtures()[position - 1].get"
+
+        holder.mTextViewFirstTeam
+                .setText(mFootballScore.getFixtures()[position - 1].getHomeTeamName());
+        holder.mTextViewSecondTeam
+                .setText(mFootballScore.getFixtures()[position - 1].getAwayTeamName());
+        holder.mTextViewGoalsFirstTeam
+                .setText(getGoalsFirstTeam(mFootballScore, position - 1));
+        holder.mTextViewGoalsSecondTeam
+                .setText(getGoalsSecondTeam(mFootballScore, position - 1));
         holder.mCardView.setTag(position);
+    }
+
+    private String getGoalsSecondTeam(FootballScore footballScore, int position) {
+        int result = Integer.getInteger(footballScore.getFixtures()[position]
+                .getFootbollResult().getGoalsHomeTeam())
+                + Integer.getInteger(footballScore.getFixtures()[position]
+                .getFootbollResult().getResultHalfTime().getGoalsHomeTeam());
+        return Integer.toString(result);
+    }
+
+    private String getGoalsFirstTeam(FootballScore footballScore, int position) {
+        int result = Integer.getInteger(footballScore.getFixtures()[position]
+                .getFootbollResult().getGoalsAwayTeam())
+                + Integer.getInteger(footballScore.getFixtures()[position]
+                .getFootbollResult().getResultHalfTime().getGoalsAwayTeam());
+        return Integer.toString(result);
     }
 
     @Override
