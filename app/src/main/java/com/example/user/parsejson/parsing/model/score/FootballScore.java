@@ -7,6 +7,12 @@ public class FootballScore {
     private String count;
     private Fixtures[] fixtures;
 
+    public FootballScore(int size){
+        _links = new UrlsFootballScore();
+        count = "";
+        fixtures = new Fixtures[size];
+    }
+
     public UrlsFootballScore get_links() {
         return _links;
     }
@@ -27,7 +33,7 @@ public class FootballScore {
         return fixtures;
     }
 
-    public void setFixtures(Fixtures[] fixtures) {
+    public void setFixtures(Fixtures[] fixtures){
         this.fixtures = fixtures;
     }
 }

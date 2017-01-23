@@ -11,7 +11,18 @@ public class Fixtures {
     private String awayTeamName;
     private FootbollResult mFootbollResult;
 
+    public Fixtures (){
+        mUrls = new UrlsFixtures();
+        date = "";
+        status = "";
+        matchday = "";
+        homeTeamName = "";
+        awayTeamName = "";
+        mFootbollResult = new FootbollResult();
+    }
+
     public UrlsFixtures getUrls() {
+
         return mUrls;
     }
 

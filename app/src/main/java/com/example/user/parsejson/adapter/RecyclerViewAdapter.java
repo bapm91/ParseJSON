@@ -50,32 +50,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
-
         holder.mTextViewFirstTeam
-                .setText(mFootballScore.getFixtures()[position - 1].getHomeTeamName());
+                .setText(mFootballScore.getFixtures()[position].getHomeTeamName());
         holder.mTextViewSecondTeam
-                .setText(mFootballScore.getFixtures()[position - 1].getAwayTeamName());
+                .setText(mFootballScore.getFixtures()[position].getAwayTeamName());
         holder.mTextViewGoalsFirstTeam
-                .setText(getGoalsFirstTeam(mFootballScore, position - 1));
+                .setText(getGoalsFirstTeam(mFootballScore, position));
         holder.mTextViewGoalsSecondTeam
-                .setText(getGoalsSecondTeam(mFootballScore, position - 1));
+                .setText(getGoalsSecondTeam(mFootballScore, position));
         holder.mCardView.setTag(position);
     }
 
     private String getGoalsSecondTeam(FootballScore footballScore, int position) {
-        int result = Integer.getInteger(footballScore.getFixtures()[position]
-                .getFootbollResult().getGoalsHomeTeam())
-                + Integer.getInteger(footballScore.getFixtures()[position]
-                .getFootbollResult().getResultHalfTime().getGoalsHomeTeam());
+        int result = 0;
+        try {
+            result = Integer.parseInt(footballScore.getFixtures()[position]
+                    .getFootbollResult().getGoalsHomeTeam())
+                    + Integer.parseInt(footballScore.getFixtures()[position]
+                    .getFootbollResult().getResultHalfTime().getGoalsHomeTeam());
+        } catch (NumberFormatException e){
+            System.out.println("Неверный формат строки!");
+        }
+
         return Integer.toString(result);
     }
 
     private String getGoalsFirstTeam(FootballScore footballScore, int position) {
-        int result = Integer.getInteger(footballScore.getFixtures()[position]
-                .getFootbollResult().getGoalsAwayTeam())
-                + Integer.getInteger(footballScore.getFixtures()[position]
-                .getFootbollResult().getResultHalfTime().getGoalsAwayTeam());
+        int result = 0;
+        try {
+            result = Integer.parseInt(footballScore.getFixtures()[position]
+                    .getFootbollResult().getGoalsAwayTeam())
+                    + Integer.parseInt(footballScore.getFixtures()[position]
+                    .getFootbollResult().getResultHalfTime().getGoalsAwayTeam());
+        } catch (NumberFormatException e){
+            System.out.println("Неверный формат строки!");
+        }
         return Integer.toString(result);
     }
 

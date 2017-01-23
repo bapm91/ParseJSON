@@ -6,6 +6,13 @@ public class UrlsFixtures {
     private Url homeTeame;
     private Url awayTeame;
 
+    public UrlsFixtures(){
+        self = new Url();
+        soccerseason = new Url();
+        homeTeame = new Url();
+        awayTeame = new Url();
+    }
+
     public Url getSelf() {
         return self;
     }

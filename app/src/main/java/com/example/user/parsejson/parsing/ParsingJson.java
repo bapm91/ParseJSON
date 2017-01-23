@@ -1,5 +1,6 @@
 package com.example.user.parsejson.parsing;
 
+import com.example.user.parsejson.R;
 import com.example.user.parsejson.parsing.model.flag.CountryFlags;
 import com.example.user.parsejson.parsing.model.score.FootballScore;
 import com.google.gson.Gson;

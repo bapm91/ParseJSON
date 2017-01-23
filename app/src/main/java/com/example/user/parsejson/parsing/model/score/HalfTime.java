@@ -4,6 +4,11 @@ public class HalfTime {
     private String goalsHomeTeam;
     private String goalsAwayTeam;
 
+    public HalfTime(){
+        goalsAwayTeam = "";
+        goalsHomeTeam = "";
+    }
+
     public String getGoalsHomeTeam() {
         return goalsHomeTeam;
     }

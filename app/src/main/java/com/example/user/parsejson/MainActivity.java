@@ -12,6 +12,7 @@ import com.example.user.parsejson.adapter.RecyclerViewAdapter;
 import com.example.user.parsejson.parsing.ParsingJson;
 import com.example.user.parsejson.parsing.model.score.Fixtures;
 import com.example.user.parsejson.parsing.model.score.FootballScore;
+import com.example.user.parsejson.parsing.model.urls.UrlsFootballScore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +28,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mFootballScore = new FootballScore();
         ParsingJson parsingJson = new ParsingJson();
-        try {
+        /*try {
             json = parsingJson.readUrl(URL_FOTBALL_SCORE);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+        json = getString(R.string.jsonStringFack);
         mFootballScore = parsingJson.parseFootballScore(json);
         mFootballScore = getOnlyNeeded(mFootballScore, 4);
-
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -50,13 +50,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private FootballScore getOnlyNeeded(FootballScore footballScore, int matchday) {
-        FootballScore result = new FootballScore();
-        result.set_links(footballScore.get_links());
-        result.setCount(footballScore.getCount());
         List<Fixtures> list = new ArrayList<>();
 
-        for (Fixtures fixtures : footballScore.getFixtures()){
-            if (Integer.parseInt(fixtures.getMatchday()) == 4){
+        for (Fixtures fixtures : footballScore.getFixtures()) {
+            if (Integer.parseInt(fixtures.getMatchday()) == 4) {
                 list.add(fixtures);
             }
         }
@@ -65,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < list.size(); i++) {
             fixtures[i] = list.get(i);
         }
-
+        FootballScore result = new FootballScore(list.size());
+        result.set_links(footballScore.get_links());
+        result.setCount(footballScore.getCount());
         result.setFixtures(fixtures);
         return result;
     }

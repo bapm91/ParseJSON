@@ -4,6 +4,11 @@ public class UrlsFootballScore {
     private Url self;
     private Url soccerseason;
 
+    public UrlsFootballScore(){
+        self = new Url();
+        soccerseason = new Url();
+    }
+
     public Url getSelf() {
         return self;
     }

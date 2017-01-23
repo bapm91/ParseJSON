@@ -5,6 +5,12 @@ public class FootbollResult {
     private String goalsAwayTeam;
     private HalfTime resultHalfTime;
 
+    public FootbollResult(){
+        goalsAwayTeam = "";
+        goalsHomeTeam = "";
+        resultHalfTime = new HalfTime();
+    }
+
     public String getGoalsHomeTeam() {
         return goalsHomeTeam;
     }
@@ -26,6 +32,7 @@ public class FootbollResult {
     }
 
     public void setResultHalfTime(HalfTime resultHalfTime) {
+        this.resultHalfTime = new HalfTime();
         this.resultHalfTime = resultHalfTime;
     }
 }

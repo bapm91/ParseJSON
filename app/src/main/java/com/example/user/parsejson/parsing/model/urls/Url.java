@@ -3,6 +3,10 @@ package com.example.user.parsejson.parsing.model.urls;
 public class Url {
     private String href;
 
+    public Url(){
+        href = "";
+    }
+
     public String getHref() {
         return href;
     }
