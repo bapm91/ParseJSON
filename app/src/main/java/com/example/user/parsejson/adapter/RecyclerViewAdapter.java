@@ -55,6 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mTextViewSecondTeam
                 .setText(mFootballScore.getFixtures()[position].getAwayTeamName());
         holder.mTextViewGoalsFirstTeam
+                //TODO right sum of goals in time and halftime
                 .setText(getGoalsFirstTeam(mFootballScore, position));
         holder.mTextViewGoalsSecondTeam
                 .setText(getGoalsSecondTeam(mFootballScore, position));

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         ParsingJson parsingJson = new ParsingJson();
         /*try {
             json = parsingJson.readUrl(URL_FOTBALL_SCORE);
+            //TODO json from a url
         } catch (Exception e) {
             e.printStackTrace();
         }*/
