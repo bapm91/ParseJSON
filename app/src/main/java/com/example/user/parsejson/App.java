@@ -9,13 +9,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class App extends Application {
 
     private static FootballData sFootballData;
-    private Retrofit retrofit;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.football-data.org/") //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .build();

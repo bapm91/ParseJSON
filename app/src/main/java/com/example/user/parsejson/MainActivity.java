@@ -22,8 +22,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
     private FootballSeasonModel posts;
 
     @Override
@@ -61,13 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(posts);
-//        if (recyclerView != null) {
-//            recyclerView.setHasFixedSize(true);
+        if (recyclerView != null) {
+            recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
-//        }
+        }
     }
 
     private FootballSeasonModel getOnlyNeeded(FootballSeasonModel footballScore, int matchday) {
@@ -96,10 +94,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 }
