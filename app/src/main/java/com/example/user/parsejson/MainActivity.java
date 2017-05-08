@@ -7,84 +7,95 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.user.parsejson.adapter.RecyclerViewAdapter;
-import com.example.user.parsejson.parsing.ParsingJson;
-import com.example.user.parsejson.parsing.model.score.Fixtures;
-import com.example.user.parsejson.parsing.model.score.FootballScore;
-import com.example.user.parsejson.parsing.model.urls.UrlsFootballScore;
+import com.example.user.parsejson.retrofit.models.football_season.Fixture;
+import com.example.user.parsejson.retrofit.models.football_season.FootballSeasonModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
-    private FootballScore mFootballScore;
-    private final String URL_FOTBALL_SCORE = "http://api.football-data.org/v1/soccerseasons/424/fixtures";
-    private String json;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
+    private FootballSeasonModel posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ParsingJson parsingJson = new ParsingJson();
-        /*try {
-            json = parsingJson.readUrl(URL_FOTBALL_SCORE);
-            //TODO json from a url
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        json = getString(R.string.jsonStringFack);
-        mFootballScore = parsingJson.parseFootballScore(json);
-        mFootballScore = getOnlyNeeded(mFootballScore, 4);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView.Adapter adapter = new RecyclerViewAdapter(mFootballScore);
-        // TODO new recyclerView with flag
-        if (recyclerView != null) {
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(adapter);
-        }
+        setToolbar();
+
+        posts = new FootballSeasonModel();
+        setRecyclerView();
+        getAndParsJSON();
+
     }
 
-    private FootballScore getOnlyNeeded(FootballScore footballScore, int matchday) {
-        List<Fixtures> list = new ArrayList<>();
+    private void setToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
 
-        for (Fixtures fixtures : footballScore.getFixtures()) {
-            if (Integer.parseInt(fixtures.getMatchday()) == 4) {
+    private void getAndParsJSON() {
+        App.getApi().getData().enqueue(new Callback<FootballSeasonModel>() {
+            @Override
+            public void onResponse(Call<FootballSeasonModel> call, Response<FootballSeasonModel> response) {
+                posts = response.body();
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<FootballSeasonModel> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setRecyclerView() {
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        layoutManager = new LinearLayoutManager(this);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(posts);
+//        if (recyclerView != null) {
+//            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(adapter);
+//        }
+    }
+
+    private FootballSeasonModel getOnlyNeeded(FootballSeasonModel footballScore, int matchday) {
+        List<Fixture> list = new ArrayList<>();
+
+        for (Fixture fixtures : footballScore.getFixtures()) {
+            if (fixtures.getMatchday() == matchday) {
                 list.add(fixtures);
             }
         }
 
-        Fixtures[] fixtures = new Fixtures[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            fixtures[i] = list.get(i);
-        }
-        FootballScore result = new FootballScore(list.size());
-        result.set_links(footballScore.get_links());
+        FootballSeasonModel result = new FootballSeasonModel();
+        result.setLinks(footballScore.getLinks());
         result.setCount(footballScore.getCount());
-        result.setFixtures(fixtures);
+        result.setFixtures(list);
         return result;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

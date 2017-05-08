@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.user.parsejson.R;
-import com.example.user.parsejson.parsing.model.score.FootballScore;
+import com.example.user.parsejson.retrofit.models.football_season.FootballSeasonModel;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private FootballScore mFootballScore;
+    private FootballSeasonModel mFootballSeasonModel;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView mCardView;
@@ -35,8 +35,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public RecyclerViewAdapter(FootballScore mFootballScore) {
-        this.mFootballScore = mFootballScore;
+    public RecyclerViewAdapter(FootballSeasonModel mFootballSeasonModel) {
+        this.mFootballSeasonModel = mFootballSeasonModel;
     }
 
     @Override
@@ -51,46 +51,86 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mTextViewFirstTeam
-                .setText(mFootballScore.getFixtures()[position].getHomeTeamName());
+                .setText(mFootballSeasonModel.getFixtures().get(position).getHomeTeamName());
         holder.mTextViewSecondTeam
-                .setText(mFootballScore.getFixtures()[position].getAwayTeamName());
+                .setText(mFootballSeasonModel.getFixtures().get(position).getAwayTeamName());
+
         holder.mTextViewGoalsFirstTeam
-                //TODO right sum of goals in time and halftime
-                .setText(getGoalsFirstTeam(mFootballScore, position));
+                .setText(goalsFirstTeam(position));
         holder.mTextViewGoalsSecondTeam
-                .setText(getGoalsSecondTeam(mFootballScore, position));
+                .setText(goalsSecondTeam(position));
         holder.mCardView.setTag(position);
     }
 
-    private String getGoalsSecondTeam(FootballScore footballScore, int position) {
-        int result = 0;
-        try {
-            result = Integer.parseInt(footballScore.getFixtures()[position]
-                    .getFootbollResult().getGoalsHomeTeam())
-                    + Integer.parseInt(footballScore.getFixtures()[position]
-                    .getFootbollResult().getResultHalfTime().getGoalsHomeTeam());
-        } catch (NumberFormatException e){
-            System.out.println("Неверный формат строки!");
+    private String goalsFirstTeam(int position) {
+        int firstTime = mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getGoalsHomeTeam();
+
+        int secondTime = mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getHalfTime()
+                .getGoalsHomeTeam();
+
+        int extraTime = 0;
+        if (mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getExtraTime() != null) {
+            extraTime = mFootballSeasonModel.getFixtures().get(position)
+                    .getResult()
+                    .getExtraTime()
+                    .getGoalsHomeTeam();
         }
 
-        return Integer.toString(result);
+        int penaltyTime = 0;
+        if (mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getPenaltyShootout() != null) {
+            penaltyTime = mFootballSeasonModel.getFixtures().get(position)
+                    .getResult()
+                    .getPenaltyShootout()
+                    .getGoalsHomeTeam();
+        }
+        return String.valueOf(firstTime + secondTime + extraTime + penaltyTime);
     }
 
-    private String getGoalsFirstTeam(FootballScore footballScore, int position) {
-        int result = 0;
-        try {
-            result = Integer.parseInt(footballScore.getFixtures()[position]
-                    .getFootbollResult().getGoalsAwayTeam())
-                    + Integer.parseInt(footballScore.getFixtures()[position]
-                    .getFootbollResult().getResultHalfTime().getGoalsAwayTeam());
-        } catch (NumberFormatException e){
-            System.out.println("Неверный формат строки!");
+    private String goalsSecondTeam(int position) {
+        int firstTime = mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getGoalsAwayTeam();
+
+        int secondTime = mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getHalfTime()
+                .getGoalsAwayTeam();
+
+        int extraTime = 0;
+        if (mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getExtraTime() != null) {
+            extraTime = mFootballSeasonModel.getFixtures().get(position)
+                    .getResult()
+                    .getExtraTime()
+                    .getGoalsAwayTeam();
         }
-        return Integer.toString(result);
+
+        int penaltyTime = 0;
+        if (mFootballSeasonModel.getFixtures().get(position)
+                .getResult()
+                .getPenaltyShootout() != null) {
+            penaltyTime = mFootballSeasonModel.getFixtures().get(position)
+                    .getResult()
+                    .getPenaltyShootout()
+                    .getGoalsAwayTeam();
+        }
+        return String.valueOf(firstTime + secondTime + extraTime + penaltyTime);
     }
 
     @Override
     public int getItemCount() {
-        return mFootballScore.getFixtures().length;
+        if (mFootballSeasonModel.getFixtures() == null){
+            return 0;
+        }
+        return mFootballSeasonModel.getFixtures().size();
     }
 }
